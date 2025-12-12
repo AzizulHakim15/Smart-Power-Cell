@@ -9,13 +9,14 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 from plot_data import plot_predictions, plot_original_vs_downsampled, plot_monthly_splits
-from data_processing import process_all_months
+#from data_processing import process_all_months
+from data_pre_post import process_all_months
 
 # ======================================
 # HYPERPARAMETERS
 # ======================================
-INPUT_STEPS = 1000
-OUTPUT_STEPS = 200
+INPUT_STEPS = 500
+OUTPUT_STEPS = 500
 BATCH_SIZE = 16
 EPOCHS = 1
 HIDDEN_SIZE1 = 32
@@ -24,7 +25,7 @@ PATIENCE = 5
 LEARNING_RATE = 0.0001
 Dropout = 0.1
 Dynamic_threshold = 2   # diff between two measured considered same in W
-Downsample_size = 20    # downsample steady points
+Downsample_size = 50    # downsample steady points
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -43,13 +44,13 @@ meas_cols = ['P_I_meas', 'Q_I_meas','P_I_meas_int','Q_I_meas_int']  # targets
 # ======================================
 # data processing
 # ======================================
-X_train, y_train, X_val, y_val, X_test, y_test , downsampled_data = process_all_months(
-    data, feature_cols, meas_cols,
-    number_of_months=12,
-    dynamic_threshold=Dynamic_threshold,
-    stable_keep_step=Downsample_size
+#X_train, y_train, X_val, y_val, X_test, y_test , downsampled_data = process_all_months(data, feature_cols, meas_cols, number_of_months=12,dynamic_threshold=Dynamic_threshold,stable_keep_step=Downsample_size)
+X_train, y_train, X_val, y_val, X_test, y_test, downsampled_data = process_all_months(
+    data,
+    feature_cols,
+    meas_cols,
+    number_of_months=12
 )
-
 # ======================================
 # SCALING
 # ======================================
