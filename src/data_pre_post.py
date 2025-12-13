@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-def process_all_months(dataframe, feature_cols, meas_cols, number_of_months=12,
+def process_all_months(dataframe, feature_cols, meas_cols, number_of_months=4,
                        window_size=20000, first_points=10000, last_points=1000, downsample_step=200):
     total_rows = len(dataframe)
     rows_per_month = total_rows // number_of_months

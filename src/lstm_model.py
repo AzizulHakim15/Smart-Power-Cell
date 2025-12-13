@@ -16,9 +16,9 @@ from data_processing import process_all_months
 # HYPERPARAMETERS
 # ======================================
 INPUT_STEPS = 500
-OUTPUT_STEPS = 500
+OUTPUT_STEPS = 20
 BATCH_SIZE = 16
-EPOCHS = 1
+EPOCHS = 2
 HIDDEN_SIZE1 = 32
 HIDDEN_SIZE2 = 64
 PATIENCE = 5
@@ -44,13 +44,13 @@ meas_cols = ['P_I_meas', 'Q_I_meas','P_I_meas_int','Q_I_meas_int']  # targets
 # ======================================
 # data processing
 # ======================================
-#X_train, y_train, X_val, y_val, X_test, y_test , downsampled_data = process_all_months(data, feature_cols, meas_cols, number_of_months=12,dynamic_threshold=Dynamic_threshold,stable_keep_step=Downsample_size)
-X_train, y_train, X_val, y_val, X_test, y_test, downsampled_data = process_all_months(
+X_train, y_train, X_val, y_val, X_test, y_test , downsampled_data = process_all_months(data, feature_cols, meas_cols, number_of_months=4,dynamic_threshold=Dynamic_threshold,stable_keep_step=Downsample_size)
+'''X_train, y_train, X_val, y_val, X_test, y_test, downsampled_data = process_all_months(
     data,
     feature_cols,
     meas_cols,
     number_of_months=12
-)
+)'''
 # ======================================
 # SCALING
 # ======================================
@@ -202,7 +202,7 @@ def compute_metrics(true, pred, target_names):
     overall_mape = np.mean(mape)
 
     print("\n=== Overall Metrics ===")
-    print(f"MSE : {mse:.4f}, RMSE : {rmse:.4f}, R2 : {r2:.4f}, MAPE : {overall_mape:.2f}%")
+    print(f"RMSE : {rmse:.4f}, R2 : {r2:.4f}, MAPE : {overall_mape:.2f}%")
 
     print("\n=== Per Target Metrics ===")
     for i, name in enumerate(target_names):
@@ -225,7 +225,7 @@ model.load_state_dict(torch.load("dynamic_response_lstm.pth"))
 model.eval()
 
 start_idx = 0
-total_steps = 170000
+total_steps = 100000
 
 true_inv, pred_inv = test_function(
     model, X_test_scaled, y_test_scaled, target_scaler,
@@ -241,6 +241,6 @@ plot_monthly_splits(
     downsampled_data,
     feature_cols=feature_cols,
     meas_cols=meas_cols,
-    number_of_months=12
+    number_of_months=4
 )
 
